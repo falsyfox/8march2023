@@ -72,8 +72,12 @@
                 cursor: pointer;
             }
 
-            .app-chat-list__item:hover {
+            .app-chat-list__item:hover:not(.app-chat-list__item_selected) {
                 background-color: #2a2b32;
+            }
+
+            .app-chat-list__item_selected {
+                background-color: rgba(52, 53, 65);
             }
 
             .app-chat-dialogue {
@@ -139,6 +143,9 @@
                                 v-for="chat in chats"
                                 :key="chat.name"
                                 @click="selectChat(chat)"
+                                :class="{
+                                    'app-chat-list__item_selected': isSelectedChat(chat)
+                                }"
                                 class="app-chat-list__item"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -300,7 +307,7 @@
                                             />
                                         </svg>
                                     </div>
-                                    <div class="app-chat-dialogue__message">{{ selectedChat.story }}</div>
+                                    <div class="app-chat-dialogue__message" style="white-space: pre-wrap;">{{ selectedChat.story }}</div>
                                 </div>
                             </template>
                         </div>
@@ -322,69 +329,25 @@
                     selectChat(chat) {
                         this.selectedChat = chat;
                     },
-                },
-
-                computed: {
                     isSelectedChat(chat) {
                         return this.selectedChat === chat;
                     }
                 },
 
-                created() {
-                    // const response = await fetch("data.json");
-                    // const data = await response.json();
-                    // console.log(data);
+                async created() {
+                    const response = await fetch("data.json");
+                    this.chats = await response.json();
 
-                    this.chats = [
-                        {
-                            name: "Шубникова Наталья",
-                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 1",
-                        },
-                        {
-                            name: "Руколь Наталья",
-                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
-                        },
-                        {
-                            name: "Руколь Наталацу",
-                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
-                        },
-                        {
-                            name: "Руколь Наталья 4",
-                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
-                        },
-                        {
-                            name: "Руколь Наталья 5",
-                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
-                        },
-                        {
-                            name: "Руколь Наталья 6",
-                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
-                        },
-                        {
-                            name: "Руколь Наталья 7",
-                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
-                        },
-                        {
-                            name: "Руколь Наталья 8",
-                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
-                        },
-                        {
-                            name: "Руколь Наталья 9",
-                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
-                        },
-                        {
-                            name: "Руколь Наталья 10",
-                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
-                        },
-                        {
-                            name: "Руколь Наталья 11",
-                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
-                        },
-                        {
-                            name: "Руколь Наталья 12",
-                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
-                        },
-                    ];
+                    // this.chats = [
+                    //     {
+                    //         name: "Шубникова Наталья",
+                    //         story: "Давным-давно на красной планете Марс жила-была юная девушка по имени Инна Агафонова. Она всегда была очарована тайнами вселенной, и ее мечтой было исследовать звезды и раскрыть их секреты.\n\nИнна жила в колонии людей, поселившихся на Марсе, и проводила большую часть своих дней, изучая окружающую среду планеты и проводя эксперименты. Однако она никогда не упускала из виду свою конечную цель — путешествие в самые дальние уголки космоса.\n\nОднажды, исследуя бесплодную местность Марса, Инна наткнулась на древний артефакт, пролежавший под землей тысячи лет. Когда она выкопала его из земли, то поняла, что это карта галактики с указанием расположения бесчисленных планет и звезд.\n\nС помощью карты Инна вскоре обнаружила, что по всей вселенной разбросано множество других цивилизаций, каждая со своими уникальными культурами и традициями. Ей очень хотелось посетить эти места и узнать больше о космосе, но она знала, что потребуются большие усилия и жертвы, чтобы воплотить ее мечту в реальность.\n\nНе испугавшись, Инна посвятила себя учебе, оттачивая свои навыки в науке и технике. С помощью своих друзей и коллег она разработала космический корабль, который позволил бы ей путешествовать через бескрайнюю пустоту космоса.\n\nОтправляясь в путешествие, Инна почувствовала волнение и трепет, зная, что она вступает на неизведанную территорию. Однако она была полна решимости следовать за своими мечтами, куда бы они ни завели ее.\n\nИтак, Инна путешествовала по галактике, посещая странные и экзотические миры, сталкиваясь с новыми цивилизациями и раскрывая тайны вселенной. Хотя на своем пути она столкнулась со многими трудностями, она никогда не теряла из виду свою цель, и в конце концов она стала одним из величайших исследователей за всю историю человечества."
+                    //     },
+                    //     {
+                    //         name: "Руколь Наталья",
+                    //         story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
+                    //     },
+                    // ];
                 },
             }).mount("#app");
         </script>
