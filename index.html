@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Подарок девушкам Лаборатории Качества на 8 марта!</title>
+        <link rel="stylesheet" href="extends.css" />
+        <script src="vue.global.js"></script>
+    </head>
+    <body>
+        <style scoped>
+            @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+            #app {
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .app-row {
+                display: flex;
+                gap: 10px;
+                height: 100%;
+            }
+
+            .app-col-left {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                background-color: rgb(32, 33, 35);
+                width: 40%;
+                max-width: 40%;
+                padding: 20px;
+                height: 100%;
+            }
+
+            .app-col-right {
+                width: 100%;
+                padding: 20px;
+            }
+
+            .app-chat-search__input {
+                background-color: rgb(64, 65, 79);
+                color: #fff;
+                width: 100%;
+                border: none;
+                padding: 10px;
+            }
+
+            .app-chat-search__input:focus {
+                outline: none;
+            }
+
+            .app-chat-list {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                overflow-y: auto;
+            }
+
+            .app-chat-list__inner {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .app-chat-list__item {
+                display: flex;
+                gap: 10px;
+                fill: #fff;
+                padding: 10px;
+                cursor: pointer;
+            }
+
+            .app-chat-list__item:hover {
+                background-color: #2a2b32;
+            }
+
+            .app-chat-dialogue {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                overflow-y: auto;
+            }
+
+            .app-chat-dialogue__inner {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .app-chat-dialogue__me,
+            .app-chat-dialogue__bot {
+                display: flex;
+                gap: 30px;
+                padding: 30px;
+            }
+
+            .app-chat-dialogue__me {
+                justify-content: end;
+            }
+
+            .app-chat-dialogue__bot {
+                background: rgb(68, 70, 84);
+            }
+
+            .app-chat-dialogue__icon {
+                display: flex;
+                fill: #fff;
+                background: rgb(16, 163, 127);
+                height: 36px;
+                width: 36px;
+                padding: 6px;
+                border-radius: 6px;
+            }
+
+            .app-chat-dialogue__message {
+                padding-top: 8px;
+                max-width: 80%;
+            }
+        </style>
+
+        <div id="app" class="app-chat-wrapper container">
+            <div class="app-row">
+                <div class="app-col-left">
+                    <div class="text-upper">
+                        Привет, я <span class="color-blue">Мартовский ЛКРобот</span>. <br />
+                        Нейросеть, основанная на ChatGPT (Шутка).
+                    </div>
+                    <div class="text-upper">
+                        Я просто похож на эту нейросеть, все истории были сгенерированы в ней. А я просто интерфейс для
+                        удобного изучения этих историй
+                    </div>
+                    <div>Список чатов:</div>
+
+                    <div class="app-chat-list">
+                        <div class="app-chat-list__inner">
+                            <div
+                                v-for="chat in chats"
+                                :key="chat.name"
+                                @click="selectChat(chat)"
+                                class="app-chat-list__item"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path
+                                        d="M22 3v13h-11.643l-4.357 3.105v-3.105h-4v-13h20zm2-2h-24v16.981h4v5.019l7-5.019h13v-16.981z"
+                                    />
+                                </svg>
+                                <span>{{ chat.name }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-col-right">
+                    <div class="app-chat-dialogue">
+                        <div class="app-chat-dialogue__inner">
+                            <template v-if="selectedChat === null">
+                                <div class="app-chat-dialogue__me">
+                                    <div class="app-chat-dialogue__icon">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                d="M20.822 18.096c-3.439-.794-6.641-1.49-5.09-4.418 4.719-8.912 1.251-13.678-3.732-13.678-5.082 0-8.465 4.949-3.732 13.678 1.598 2.945-1.725 3.641-5.09 4.418-2.979.688-3.178 2.143-3.178 4.663l.005 1.241h1.995c0-3.134-.125-3.55 1.838-4.003 2.851-.657 5.543-1.278 6.525-3.456.359-.795.592-2.103-.338-3.815-2.058-3.799-2.578-7.089-1.423-9.026 1.354-2.275 5.426-2.264 6.767-.034 1.15 1.911.639 5.219-1.403 9.076-.91 1.719-.671 3.023-.31 3.814.99 2.167 3.707 2.794 6.584 3.458 1.879.436 1.76.882 1.76 3.986h1.995l.005-1.241c0-2.52-.199-3.975-3.178-4.663z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div class="app-chat-dialogue__message">/start</div>
+                                </div>
+                                <div class="app-chat-dialogue__bot">
+                                    <div class="app-chat-dialogue__icon">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                d="M6.613 18.581m9.387-9.581c0 2.209-1.791 4-4 4s-4-1.791-4-4 1.791-4 4-4 4 1.791 4 4zm-2 0c0-1.103-.896-2-2-2s-2 .897-2 2 .896 2 2 2 2-.897 2-2zm-9 0c0 3.86 3.141 7 7 7s7-3.14 7-7-3.141-7-7-7-7 3.14-7 7zm16 0c0 4.97-4.029 9-9 9s-9-4.03-9-9 4.029-9 9-9 9 4.03 9 9zm-.404 12.501c1.007 1.142-.014 2.679-1.448 2.481-1.795-.245-3.236-1.702-7.147-1.702-3.91 0-5.352 1.458-7.146 1.702-1.436.198-2.456-1.34-1.449-2.481l2.898-3.289c.559.388 1.156.725 1.79.994l-2.025 2.298c1.295-.524 3.065-1.225 5.933-1.225s4.638.7 5.933 1.224l-2.025-2.298c.634-.27 1.231-.606 1.79-.994l2.896 3.29z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div class="app-chat-dialogue__message">
+                                        Привет! Я ЛКРобот. Во первых, мне тут передали поздравление для вас, наши
+                                        любимые девушки. Сейчас напишу ...
+                                    </div>
+                                </div>
+                                <div class="app-chat-dialogue__bot">
+                                    <div class="app-chat-dialogue__icon">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                d="M6.613 18.581m9.387-9.581c0 2.209-1.791 4-4 4s-4-1.791-4-4 1.791-4 4-4 4 1.791 4 4zm-2 0c0-1.103-.896-2-2-2s-2 .897-2 2 .896 2 2 2 2-.897 2-2zm-9 0c0 3.86 3.141 7 7 7s7-3.14 7-7-3.141-7-7-7-7 3.14-7 7zm16 0c0 4.97-4.029 9-9 9s-9-4.03-9-9 4.029-9 9-9 9 4.03 9 9zm-.404 12.501c1.007 1.142-.014 2.679-1.448 2.481-1.795-.245-3.236-1.702-7.147-1.702-3.91 0-5.352 1.458-7.146 1.702-1.436.198-2.456-1.34-1.449-2.481l2.898-3.289c.559.388 1.156.725 1.79.994l-2.025 2.298c1.295-.524 3.065-1.225 5.933-1.225s4.638.7 5.933 1.224l-2.025-2.298c.634-.27 1.231-.606 1.79-.994l2.896 3.29z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div class="app-chat-dialogue__message">
+                                        <p>Дорогие девушки Лаборатории Качества!</p>
+
+                                        <p>
+                                            Просим вас принять поздравления с самым нежным, женственным и красивым
+                                            праздником в году — с 8 марта! Ваша тяжелая работа и самоотверженность в
+                                            Лаборатории качества, безусловно, заслуживают признания!
+                                        </p>
+
+                                        <p>
+                                            Ваше стремление к совершенству и стремление к качеству являются источником
+                                            вдохновения для всех нас.
+                                        </p>
+
+                                        <p>
+                                            Поэтому в этот Международный женский день мы хотим поблагодарить вас за
+                                            выдающуюся работу и за то, что вы сильные, способные и преданные своему делу
+                                            профессионалы. Прожолжайте в том же духе вдохновлять других своими
+                                            достижениями.
+                                        </p>
+
+                                        <p>Поздравляем с Международным женским днем!</p>
+                                    </div>
+                                </div>
+                                <div class="app-chat-dialogue__bot">
+                                    <div class="app-chat-dialogue__icon">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                d="M6.613 18.581m9.387-9.581c0 2.209-1.791 4-4 4s-4-1.791-4-4 1.791-4 4-4 4 1.791 4 4zm-2 0c0-1.103-.896-2-2-2s-2 .897-2 2 .896 2 2 2 2-.897 2-2zm-9 0c0 3.86 3.141 7 7 7s7-3.14 7-7-3.141-7-7-7-7 3.14-7 7zm16 0c0 4.97-4.029 9-9 9s-9-4.03-9-9 4.029-9 9-9 9 4.03 9 9zm-.404 12.501c1.007 1.142-.014 2.679-1.448 2.481-1.795-.245-3.236-1.702-7.147-1.702-3.91 0-5.352 1.458-7.146 1.702-1.436.198-2.456-1.34-1.449-2.481l2.898-3.289c.559.388 1.156.725 1.79.994l-2.025 2.298c1.295-.524 3.065-1.225 5.933-1.225s4.638.7 5.933 1.224l-2.025-2.298c.634-.27 1.231-.606 1.79-.994l2.896 3.29z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div class="app-chat-dialogue__message">
+                                        <p>А сейчас можете ознакомиться с нашим подарком.</p>
+                                        <p>
+                                            Слева есть чаты. Для каждой девушки свой чат со своей, сгенерированной
+                                            нейросетью, коротенькой историей.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="app-chat-dialogue__bot">
+                                    <div class="app-chat-dialogue__icon">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                d="M6.613 18.581m9.387-9.581c0 2.209-1.791 4-4 4s-4-1.791-4-4 1.791-4 4-4 4 1.791 4 4zm-2 0c0-1.103-.896-2-2-2s-2 .897-2 2 .896 2 2 2 2-.897 2-2zm-9 0c0 3.86 3.141 7 7 7s7-3.14 7-7-3.141-7-7-7-7 3.14-7 7zm16 0c0 4.97-4.029 9-9 9s-9-4.03-9-9 4.029-9 9-9 9 4.03 9 9zm-.404 12.501c1.007 1.142-.014 2.679-1.448 2.481-1.795-.245-3.236-1.702-7.147-1.702-3.91 0-5.352 1.458-7.146 1.702-1.436.198-2.456-1.34-1.449-2.481l2.898-3.289c.559.388 1.156.725 1.79.994l-2.025 2.298c1.295-.524 3.065-1.225 5.933-1.225s4.638.7 5.933 1.224l-2.025-2.298c.634-.27 1.231-.606 1.79-.994l2.896 3.29z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div class="app-chat-dialogue__message">
+                                        <p>
+                                            А, чуть не забыл. Истории могут быть слегка забавными, странными,
+                                            кринжанутыми и просто приятными. Так что не судите нейросеть строго - она
+                                            старалась!
+                                        </p>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template v-if="selectedChat !== null">
+                                <div class="app-chat-dialogue__me">
+                                    <div class="app-chat-dialogue__icon">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                d="M20.822 18.096c-3.439-.794-6.641-1.49-5.09-4.418 4.719-8.912 1.251-13.678-3.732-13.678-5.082 0-8.465 4.949-3.732 13.678 1.598 2.945-1.725 3.641-5.09 4.418-2.979.688-3.178 2.143-3.178 4.663l.005 1.241h1.995c0-3.134-.125-3.55 1.838-4.003 2.851-.657 5.543-1.278 6.525-3.456.359-.795.592-2.103-.338-3.815-2.058-3.799-2.578-7.089-1.423-9.026 1.354-2.275 5.426-2.264 6.767-.034 1.15 1.911.639 5.219-1.403 9.076-.91 1.719-.671 3.023-.31 3.814.99 2.167 3.707 2.794 6.584 3.458 1.879.436 1.76.882 1.76 3.986h1.995l.005-1.241c0-2.52-.199-3.975-3.178-4.663z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div class="app-chat-dialogue__message">
+                                        Привет, ЛКРобот! Сгенерируй, пожалуйста, историю для {{ selectedChat.name }}
+                                    </div>
+                                </div>
+                                <div class="app-chat-dialogue__bot">
+                                    <div class="app-chat-dialogue__icon">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                d="M6.613 18.581m9.387-9.581c0 2.209-1.791 4-4 4s-4-1.791-4-4 1.791-4 4-4 4 1.791 4 4zm-2 0c0-1.103-.896-2-2-2s-2 .897-2 2 .896 2 2 2 2-.897 2-2zm-9 0c0 3.86 3.141 7 7 7s7-3.14 7-7-3.141-7-7-7-7 3.14-7 7zm16 0c0 4.97-4.029 9-9 9s-9-4.03-9-9 4.029-9 9-9 9 4.03 9 9zm-.404 12.501c1.007 1.142-.014 2.679-1.448 2.481-1.795-.245-3.236-1.702-7.147-1.702-3.91 0-5.352 1.458-7.146 1.702-1.436.198-2.456-1.34-1.449-2.481l2.898-3.289c.559.388 1.156.725 1.79.994l-2.025 2.298c1.295-.524 3.065-1.225 5.933-1.225s4.638.7 5.933 1.224l-2.025-2.298c.634-.27 1.231-.606 1.79-.994l2.896 3.29z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div class="app-chat-dialogue__message">{{ selectedChat.story }}</div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            Vue.createApp({
+                data() {
+                    return {
+                        chats: null,
+                        selectedChat: null,
+                    };
+                },
+
+                methods: {
+                    selectChat(chat) {
+                        this.selectedChat = chat;
+                    },
+                },
+
+                computed: {
+                    isSelectedChat(chat) {
+                        return this.selectedChat === chat;
+                    }
+                },
+
+                created() {
+                    // const response = await fetch("data.json");
+                    // const data = await response.json();
+                    // console.log(data);
+
+                    this.chats = [
+                        {
+                            name: "Шубникова Наталья",
+                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 1",
+                        },
+                        {
+                            name: "Руколь Наталья",
+                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
+                        },
+                        {
+                            name: "Руколь Наталацу",
+                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
+                        },
+                        {
+                            name: "Руколь Наталья 4",
+                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
+                        },
+                        {
+                            name: "Руколь Наталья 5",
+                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
+                        },
+                        {
+                            name: "Руколь Наталья 6",
+                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
+                        },
+                        {
+                            name: "Руколь Наталья 7",
+                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
+                        },
+                        {
+                            name: "Руколь Наталья 8",
+                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
+                        },
+                        {
+                            name: "Руколь Наталья 9",
+                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
+                        },
+                        {
+                            name: "Руколь Наталья 10",
+                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
+                        },
+                        {
+                            name: "Руколь Наталья 11",
+                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
+                        },
+                        {
+                            name: "Руколь Наталья 12",
+                            story: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic ut dolore eligendi tenetur necessitatibus exercitationem debitis, assumenda qui blanditiis. Saepe veniam sunt molestias fugit doloribus officia impedit est numquam. 2",
+                        },
+                    ];
+                },
+            }).mount("#app");
+        </script>
+    </body>
+</html>

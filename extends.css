@@ -1,0 +1,50 @@
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Roboto, sans-serif;
+    background-color: rgb(52, 53, 65);
+    color: #fff;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+}
+
+.container {
+    width: 980px;
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-upper {
+    text-transform: uppercase;
+}
+
+.color-blue {
+    color: #65a5c0;
+}
+
+.mt-1 {
+    margin-top: 1rem;
+}
+
+.mt-2 {
+    margin-top: 1.5rem;
+}
+
+.mt-3 {
+    margin-top: 2rem;
+}
